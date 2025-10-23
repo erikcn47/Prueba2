@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Profundo del Protocolo DHCP</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración para usar la fuente Inter y un esquema de color oscuro por defecto -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dhcp-blue': '#1e40af', // Blue 700
+                        'dhcp-dark': '#0f172a', // Slate 900
+                        'dhcp-light': '#1e293b', // Slate 800
+                        'dhcp-accent': '#3b82f6', // Blue 500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos base para la página */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para las tarjetas de contenido */
+        .card {
+            background-color: var(--tw-colors-dhcp-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        /* Estilo para la tabla de comparación */
+        .dhcp-table th {
+            background-color: var(--tw-colors-dhcp-blue);
+        }
+    </style>
+</head>
+<body class="bg-dhcp-dark text-gray-100 min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Encabezado Principal -->
+        <header class="text-center mb-12 p-6 bg-dhcp-blue rounded-xl shadow-2xl">
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+                Análisis Profundo del Protocolo DHCP
+            </h1>
+            <p class="mt-2 text-dhcp-light/75 text-lg sm:text-xl font-medium">
+                Conceptos Clave, Ciclo de Comunicación y Ciberseguridad
+            </p>
+        </header>
+
+        <!-- Contenido Principal - Grid de Secciones -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            <!-- 1. Ciclo de Comunicación (DORA) -->
+            <section class="card p-6 rounded-xl shadow-lg lg:col-span-2">
+                <h2 class="text-3xl font-bold mb-4 text-dhcp-accent border-b border-dhcp-accent/50 pb-2">
+                    1. Ciclo de Comunicación DHCP: DORA y Mensajes Auxiliares
+                </h2>
+                <p class="mb-4 text-gray-300">
+                    El proceso de asignación de una dirección IP se articula mediante el intercambio de cuatro mensajes clave, conocido como el ciclo DORA, seguido de mensajes de control para manejo de errores y liberación.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="bg-dhcp-dark/50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold text-dhcp-accent">DHCPDISCOVER (Cliente)</h3>
+                        <p class="text-sm text-gray-400">Mensaje de difusión (`broadcast`) enviado por el cliente para localizar y buscar servidores DHCP activos en la red. El cliente aún no tiene dirección IP.</p>
+                    </div>
+                    <div class="bg-dhcp-dark/50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold text-dhcp-accent">DHCPOFFER (Servidor)</h3>
+                        <p class="text-sm text-gray-400">El servidor DHCP responde con una oferta de dirección IP disponible y otros parámetros de configuración (máscara, gateway, tiempo de concesión).</p>
+                    </div>
+                    <div class="bg-dhcp-dark/50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold text-dhcp-accent">DHCPREQUEST (Cliente)</h3>
+                        <p class="text-sm text-gray-400">El cliente acepta la oferta o solicita la renovación de una concesión existente. Si acepta una oferta de un servidor, implícitamente rechaza las demás.</p>
+                    </div>
+                    <div class="bg-dhcp-dark/50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold text-dhcp-accent">DHCPACK (Servidor)</h3>
+                        <p class="text-sm text-gray-400">Mensaje de confirmación final. El servidor envía los parámetros de red definitivos, cierra el ciclo y el cliente comienza a usar la dirección IP.</p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold mb-2 text-dhcp-accent">Mensajes de Control (Error/Liberación)</h3>
+                    <ul class="list-disc list-inside ml-4 text-gray-300 space-y-1">
+                        <li><strong class="text-yellow-400">DHCPDECLINE:</strong> El cliente informa que la dirección IP ofrecida ya está en uso por otro dispositivo.</li>
+                        <li><strong class="text-yellow-400">DHCPNACK:</strong> El servidor indica al cliente que la dirección IP solicitada no es válida para el ámbito o ya ha caducado.</li>
+                        <li><strong class="text-yellow-400">DHCPRELEASE:</strong> El cliente informa al servidor que ha terminado de usar la dirección IP asignada, liberándola inmediatamente para que pueda ser reasignada.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 2. Gestión de Direcciones y Opciones -->
+            <section class="card p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-4 text-dhcp-accent border-b border-dhcp-accent/50 pb-2">
+                    2. Gestión de Direcciones y Concesiones
+                </h2>
+                
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Métodos de Asignación de Direcciones IP</h3>
+                <div class="space-y-4 text-gray-300">
+                    <p><strong class="text-green-400">Dinámica:</strong> Asignación temporal de IP por un tiempo limitado (Lease Time). Usado en la mayoría de las redes, ideal para dispositivos móviles o invitados.</p>
+                    <p><strong class="text-green-400">Automática:</strong> Asignación permanente de IP en el primer contacto. El cliente siempre recibe la misma IP, pero la asignación sigue siendo automática (sin intervención manual directa del administrador por IP/MAC).</p>
+                    <p><strong class="text-green-400">Manual (Estática):</strong> El administrador asocia una IP específica a una dirección MAC en el servidor. Ideal para servidores, impresoras de red o cualquier dispositivo que requiera una IP fija conocida.</p>
+                </div>
+
+                <h3 class="text-2xl font-semibold mt-6 mb-2">Tiempo de Concesión (Lease Time)</h3>
+                <p class="text-gray-300 mb-2">Es el periodo durante el cual el cliente tiene derecho a usar la dirección IP. El cliente intenta renovar la concesión cuando ha transcurrido el <strong class="text-yellow-400">50% del tiempo total</strong>.</p>
+                
+                <ul class="text-gray-300 space-y-3 mt-3">
+                    <li>
+                        <strong class="text-red-400">Concesión Corta:</strong> Favorece la movilidad y la eficiencia en el uso de direcciones (se recuperan rápido), pero genera <em class="font-bold">más tráfico DHCP</em> (más solicitudes de renovación/asignación).
+                    </li>
+                    <li>
+                        <strong class="text-blue-400">Concesión Larga:</strong> Reduce la sobrecarga de red (menos tráfico DHCP), pero aumenta el riesgo de <em class="font-bold">agotamiento de direcciones IP</em> si hay mucha rotación de dispositivos.
+                    </li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold mt-6 mb-2">Reservas y Exclusiones</h3>
+                <ul class="list-disc list-inside ml-4 text-gray-300 space-y-1">
+                    <li><strong class="text-purple-400">Reservas:</strong> Asignan una dirección IP dentro del pool a una MAC específica (Asignación Manual) para garantizar que dicho dispositivo siempre reciba esa IP.</li>
+                    <li><strong class="text-purple-400">Exclusiones:</strong> Direcciones IP dentro del rango del ámbito que el servidor <em class="font-bold">nunca</em> asignará automáticamente, típicamente reservadas para dispositivos configurados estáticamente fuera del DHCP.</li>
+                </ul>
+            </section>
+
+            <!-- 3. Vulnerabilidades y Mitigación de Ataques -->
+            <section class="card p-6 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-4 text-dhcp-accent border-b border-dhcp-accent/50 pb-2">
+                    3. Vulnerabilidades y Mitigación de Ataques
+                </h2>
+
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Ataques Comunes</h3>
+                <div class="space-y-4 text-gray-300">
+                    <p>
+                        <strong class="text-red-500">Agotamiento de DHCP (DHCP Starvation):</strong> Un atacante satura el servidor DHCP con peticiones falsas (usando diferentes direcciones MAC falsificadas) hasta consumir todas las direcciones IP disponibles en el pool. Esto resulta en un ataque de denegación de servicio (DoS) para nuevos clientes legítimos.
+                    </p>
+                    <p>
+                        <strong class="text-red-500">Suplantación de Identidad de DHCP (DHCP Spoofing/Rogue Server):</strong> El atacante instala un servidor DHCP falso. Los clientes lo contactan y este servidor malicioso les ofrece direcciones IP no válidas o configura parámetros de red para forzar el uso de un <em class="font-bold">gateway</em> (Man-in-the-Middle) o <em class="font-bold">servidores DNS/WINS</em> controlados por el atacante.
+                    </p>
+                    <p class="mt-2 border-l-4 border-yellow-500 pl-3 italic">
+                        El agotamiento a menudo precede a la suplantación: un atacante satura el servidor legítimo (Starvation) para garantizar que los nuevos clientes solo puedan recibir una respuesta (un DHCPOFFER malicioso) de su servidor DHCP falso (Spoofing).
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold mt-6 mb-2">Mitigación: DHCP Snooping</h3>
+                <p class="text-gray-300">
+                    El DHCP Snooping es un mecanismo de seguridad implementado típicamente en switches gestionados (capa 2) que protege la red contra ataques de agotamiento y suplantación.
+                </p>
+                <ul class="list-disc list-inside ml-4 text-gray-300 space-y-2 mt-3">
+                    <li><strong class="text-green-400">Tabla de Vinculación:</strong> Crea y mantiene una tabla de vinculación (binding table) de <code class="bg-gray-700 p-1 rounded">IP, MAC, Puerto</code> para mensajes DHCPACK válidos.</li>
+                    <li><strong class="text-green-400">Confianza de Puertos:</strong> Clasifica los puertos del switch como **confiables** (donde se conecta el servidor DHCP legítimo) o **no confiables** (donde se conectan los clientes).</li>
+                    <li><strong class="text-green-400">Filtrado:</strong> Descarta automáticamente mensajes DHCPOFFER o DHCPACK provenientes de puertos no confiables (evitando Spoofing) y limita el número de DHCPDISCOVER por puerto (mitigando Starvation).</li>
+                    <li><strong class="text-green-400">Opción 82:</strong> Se utiliza para agentes de retransmisión DHCP, añadiendo información sobre el puerto físico y el VLAN del cliente, lo que mejora la traza y la validación en entornos complejos.</li>
+                </ul>
+            </section>
+
+            <!-- 4. Diferencias de Protocolo (IPv4 vs. IPv6) -->
+            <section class="card p-6 rounded-xl shadow-lg lg:col-span-2">
+                <h2 class="text-3xl font-bold mb-4 text-dhcp-accent border-b border-dhcp-accent/50 pb-2">
+                    4. Diferencias Clave entre DHCPv4 y DHCPv6
+                </h2>
+
+                <p class="mb-4 text-gray-300">
+                    Aunque ambos cumplen la misma función, DHCP para IPv4 (DHCPv4) y DHCP para IPv6 (DHCPv6) operan con diferencias fundamentales en su modelo de administración y la información que proporcionan.
+                </p>
+
+                <div class="overflow-x-auto rounded-lg shadow-xl">
+                    <table class="min-w-full divide-y divide-gray-700 dhcp-table">
+                        <thead class="bg-dhcp-blue text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aspecto</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">DHCPv4</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">DHCPv6</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-dhcp-light divide-y divide-gray-700">
+                            <!-- Diferencia 1: Administración -->
+                            <tr class="hover:bg-dhcp-light/75">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-dhcp-accent">Modelo de Administración</td>
+                                <td class="px-6 py-4">Se activa y administra por <strong class="font-bold">interfaz lógica</strong> (como un ámbito o alcance).</td>
+                                <td class="px-6 py-4">No requiere configuración explícita; la funcionalidad se activa en la <strong class="font-bold">interfaz física</strong>.</td>
+                            </tr>
+                            <!-- Diferencia 2: Máscara de Subred -->
+                            <tr class="hover:bg-dhcp-light/75">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-dhcp-accent">Manejo de Máscara de Subred</td>
+                                <td class="px-6 py-4">La <strong class="font-bold">máscara de subred es proporcionada</strong> obligatoriamente por el servidor DHCP.</td>
+                                <td class="px-6 py-4">La información de la máscara de subred es proporcionada por los <strong class="font-bold">anuncios de enrutador</strong> (Router Advertisements), no por el servidor DHCPv6.</td>
+                            </tr>
+                            <!-- Diferencia 3: Nombre de Host (Adicional) -->
+                            <tr class="hover:bg-dhcp-light/75">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-dhcp-accent">Opción de Nombre de Host</td>
+                                <td class="px-6 py-4">Opción estándar disponible para establecer el nombre del nodo.</td>
+                                <td class="px-6 py-4"><strong class="font-bold">No existe</strong> la opción de nombre de host DHCPv6.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Pie de página o fuente -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Análisis Técnico de Redes y Ciberseguridad.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
