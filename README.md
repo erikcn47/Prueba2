@@ -1,2 +1,2 @@
 # Prueba2
-[Repositorio de Prueba2](https://erikcn47.github.io/Prueba2/)
+[Servicio DHCP](https://erikcn47.github.io/Prueba2/)
